@@ -41,13 +41,13 @@ shared: &shared
     - run:
         name: Add dynamic shared vars to env.
         command: |
-          .circleci/load_env.sh
+          sh .circleci/load_env.sh
 
     - run:
         name: Build and push Docker image.
         command: |
           source $BASH_ENV
-          .circleci/build-image.sh
+          sh .circleci/build-image.sh
 
 jobs:
   build-amd64:
