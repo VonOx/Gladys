@@ -84,7 +84,7 @@ npm install -g grunt-cli
 
 #### Connect Gladys to MySQL
 
-To connect Gladys to your database, you will need to set some environment variables.
+To connect Gladys to your database, you will need to set some environment variables..
 To do so, you'll have to create a `.env` file at the root of this project. The content of this file can be found by looking at `.env-sample`, which lists all the customizable env vars.
 
 **Note :** You will need to create the database as well in MySQL:
