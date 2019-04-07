@@ -60,6 +60,7 @@ jobs:
       TAG: amd64
       TARGET: amd64
       QEMU_ARCH: amd64
+      QEMU_VERSION: v2.11.0
   build-arm32v6:
     <<: *shared
     environment:
