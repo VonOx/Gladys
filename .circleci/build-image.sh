@@ -14,7 +14,7 @@ export IMAGE_ID="${REGISTRY}/${IMAGE}:${VERSION}-${TAG}"
 # Replace the repo's Dockerfile with our own.
 docker build -t ${IMAGE_ID} \
   --build-arg target=$TARGET \
-  --build-arg arch=$QEMU_ARCH ./docker/Dockerfile.${TARGET} .
+  --build-arg arch=$QEMU_ARCH -f ./docker/Dockerfile.${TARGET} .
 
 # Login to Docker Hub.
 echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
