@@ -3,19 +3,11 @@
 set -eu
 
 export IMAGE_ID="${REGISTRY}/${IMAGE}:${VERSION}-${TAG}"
-# WORKDIR=$GOPATH/src/github.com/${GITHUB_REPO}
-# mkdir -p $WORKDIR
-# git clone https://github.com/${GITHUB_REPO} $WORKDIR
-# cd $WORKDIR
 
 # ============
 # <qemu-support>
-if [ $GOARCH == 'amd64' ]; then
-  touch qemu-amd64-static
-else
   curl -sL "https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/qemu-${QEMU_ARCH}-static.tar.gz" | tar xz
   docker run --rm --privileged multiarch/qemu-user-static:register
-fi
 # </qemu-support>
 # ============
 

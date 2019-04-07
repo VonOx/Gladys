@@ -3,13 +3,13 @@ version: 2.0
 build_jobs: &build_jobs
   jobs:
     - build-amd64
-    - build-arm64
-    - build-armhf
+    - build-arm32v6
+    - build-arm32v7
     - push-manifest:
         requires:
           - build-amd64
-          - build-arm64
-          - build-armhf
+          - build-arm32v6
+          - build-arm32v7
 
 workflows:
   version: 2
@@ -60,17 +60,7 @@ jobs:
       TAG: amd64
       TARGET: amd64
       QEMU_ARCH: amd64
-  build-arm64:
-    <<: *shared
-    environment:
-      GITHUB_REPO: vonox/gladys
-      IMAGE: gladys
-      QEMU_ARCH: aarch64
-      QEMU_VERSION: v2.11.0
-      REGISTRY: vonox
-      TAG: arm64
-      TARGET: arm64v8
-  build-armhf:
+  build-arm32v6:
     <<: *shared
     environment:
       GITHUB_REPO: vonox/gladys
@@ -80,6 +70,16 @@ jobs:
       REGISTRY: vonox
       TAG: arm
       TARGET: arm32v6
+  build-arm32v7:
+    <<: *shared
+    environment:
+      GITHUB_REPO: vonox/gladys
+      IMAGE: gladys
+      QEMU_ARCH: arm
+      QEMU_VERSION: v2.11.0
+      REGISTRY: vonox
+      TAG: armv7
+      TARGET: arm32v7
   push-manifest:
     docker:
       - image: docker:18
@@ -111,12 +111,12 @@ jobs:
             export VERSION=$(cat ~/VERSION)
             echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin;
             manifest-tool push from-args \
-              --platforms linux/amd64,linux/arm,linux/arm64 \
+              --platforms linux/amd64,linux/armv7,linux/arm \
               --template "$REGISTRY/$IMAGE:$VERSION-ARCH" \
               --target "$REGISTRY/$IMAGE:$VERSION"
             if [ "${CIRCLE_BRANCH}" == 'master' ]; then
               manifest-tool push from-args \
-                --platforms linux/amd64,linux/arm,linux/arm64 \
+                --platforms linux/amd64,linux/armv7,linux/arm \
                 --template "$REGISTRY/$IMAGE:$VERSION-ARCH" \
                 --target "$REGISTRY/$IMAGE:latest"
             fi
