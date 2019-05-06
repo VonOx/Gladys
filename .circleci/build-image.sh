@@ -6,7 +6,7 @@ export IMAGE_ID="${REGISTRY}/${IMAGE}:${VERSION}-${TAG}"
 
 # ============
 # <qemu-support>
-  wget -N https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/x86_64_qemu-${QEMU_ARCH}-static.tar.gz -P ./docker_tmp
+  wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/x86_64_qemu-${QEMU_ARCH}-static.tar.gz -P ./docker_tmp
   cd ./docker_tmp && tar -xvf ./x86_64_qemu-${target_arch}-static.tar.gz && cd -
   docker run --rm --privileged multiarch/qemu-user-static:register
 # </qemu-support>
