@@ -1,129 +1,82 @@
-version: 2.0
+version: 2
+jobs:
+  build:
+    machine: 
+      docker_layer_caching: true
+    steps: 
+      - checkout
 
-build_jobs: &build_jobs
-  jobs:
-    - build-amd64
-    - build-arm32v6
-    - build-arm32v7
-    - push-manifest:
-        requires:
-          - build-amd64
-          - build-arm32v6
-          - build-arm32v7
+  # publish jobs require $DOCKERHUB_REPO, $DOCKERHUB_USER, $DOCKERHUB_PASS defined
+  publish_docker_linuxamd64:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout  
+      - run:
+          command: |
+            LATEST_TAG=${CIRCLE_TAG:1} #trim v from tag
+            #
+            sudo docker build --pull -t $DOCKERHUB_REPO:$LATEST_TAG-amd64 -f ./docker/Dockerfile.amd64 .
+            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
+            sudo docker push $DOCKERHUB_REPO:$LATEST_TAG-amd64
+
+  publish_docker_linuxarm:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout  
+      - run:
+          command: |
+            sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
+            LATEST_TAG=${CIRCLE_TAG:1} #trim v from tag
+            #
+            sudo docker build --pull -t $DOCKERHUB_REPO:$LATEST_TAG-arm32v7 -f Dockerfile.arm32v7 .
+            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
+            sudo docker push $DOCKERHUB_REPO:$LATEST_TAG-arm32v7
+
+  publish_docker_multiarch:
+    machine:
+      enabled: true
+      image: circleci/classic:201808-01
+    steps:
+      - run:
+          command: |
+            # Turn on Experimental features
+            sudo mkdir $HOME/.docker
+            sudo sh -c 'echo "{ \"experimental\": \"enabled\" }" >> $HOME/.docker/config.json'
+            #
+            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
+            #
+            LATEST_TAG=${CIRCLE_TAG:1} #trim v from tag
+            sudo docker manifest create --amend $DOCKERHUB_REPO:$LATEST_TAG $DOCKERHUB_REPO:$LATEST_TAG-amd64 $DOCKERHUB_REPO:$LATEST_TAG-arm32v7
+            sudo docker manifest annotate $DOCKERHUB_REPO:$LATEST_TAG $DOCKERHUB_REPO:$LATEST_TAG-amd64 --os linux --arch amd64
+            sudo docker manifest annotate $DOCKERHUB_REPO:$LATEST_TAG $DOCKERHUB_REPO:$LATEST_TAG-arm32v7 --os linux --arch arm --variant v7
+            sudo docker manifest push $DOCKERHUB_REPO:$LATEST_TAG -p
 
 workflows:
   version: 2
-  commit:
-    <<: *build_jobs
-  nightly:
-    <<: *build_jobs
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
+  publish:
+    jobs:
+      - publish_docker_linuxamd64:
+          filters:
+            # ignore any commit on any branch by default
+            branches:
+              ignore: /.*/
+            # only act on version tags
+            tags:
+              only: /v[1-9]+(\.[0-9]+)*/
+      - publish_docker_linuxarm:
           filters:
             branches:
-              only:
-                - master
-
-shared: &shared
-  docker:
-    - image: docker:18-git
-  steps:
-    - checkout
-
-    - setup_remote_docker:
-        docker_layer_caching: true
-
-    - run:
-        name: Install build dependencies.
-        command: apk add --no-cache bash curl git jq make perl
-
-    - run:
-        name: Add dynamic shared vars to env.
-        command: |
-          sh .circleci/load_env.sh
-
-    - run:
-        name: Build and push Docker image.
-        command: |
-          source $BASH_ENV
-          sh .circleci/build-image.sh
-
-jobs:
-  build-amd64:
-    <<: *shared
-    environment:
-      GITHUB_REPO: vonox/gladys
-      IMAGE: gladys
-      REGISTRY: vonox
-      GOARCH: amd64
-      TAG: amd64
-      TARGET: amd64
-      QEMU_ARCH: amd64
-      QEMU_VERSION: v2.11.0
-  build-arm32v6:
-    <<: *shared
-    environment:
-      GITHUB_REPO: vonox/gladys
-      IMAGE: gladys
-      QEMU_ARCH: arm
-      QEMU_VERSION: v2.11.0
-      REGISTRY: vonox
-      TAG: arm
-      TARGET: arm32v6
-  build-arm32v7:
-    <<: *shared
-    environment:
-      GITHUB_REPO: vonox/gladys
-      IMAGE: gladys
-      QEMU_ARCH: arm
-      QEMU_VERSION: v2.11.0
-      REGISTRY: vonox
-      TAG: armv7
-      TARGET: arm32v7
-  push-manifest:
-    docker:
-      - image: docker:18
-    environment:
-      GITHUB_REPO: vonox/gladys
-      IMAGE: gladys
-      REGISTRY: vonox
-    steps:
-      - setup_remote_docker
-
-      - run:
-          name: Determine repo version.
-          command: |
-            apk add --no-cache curl jq
-            curl -sL https://api.github.com/repos/${GITHUB_REPO}/releases/latest | jq -r ".tag_name" > ~/VERSION
-
-      - run:
-          name: Install manifest-tool.
-          command: |
-            echo "Downloading manifest-tool."
-            wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64
-            mv manifest-tool-linux-amd64 /usr/bin/manifest-tool
-            chmod +x /usr/bin/manifest-tool
-            manifest-tool --version
-
-      - run:
-          name: Push Docker manifest.
-          command: |
-            export VERSION=$(cat ~/VERSION)
-            echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin;
-            manifest-tool push from-args \
-              --platforms linux/amd64,linux/armv7,linux/arm \
-              --template "$REGISTRY/$IMAGE:$VERSION-ARCH" \
-              --target "$REGISTRY/$IMAGE:$VERSION"
-            if [ "${CIRCLE_BRANCH}" == 'master' ]; then
-              manifest-tool push from-args \
-                --platforms linux/amd64,linux/armv7,linux/arm \
-                --template "$REGISTRY/$IMAGE:$VERSION-ARCH" \
-                --target "$REGISTRY/$IMAGE:latest"
-            fi
-
-      - run:
-          name: Verify manifest was persisted remotely.
-          command: |
-            export VERSION=$(cat ~/VERSION)
-            manifest-tool inspect "$REGISTRY/$IMAGE:$VERSION"
+              ignore: /.*/
+            tags:
+              only: /v[1-9]+(\.[0-9]+)*/
+      - publish_docker_multiarch:
+          requires:
+            - publish_docker_linuxamd64
+            - publish_docker_linuxarm
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[1-9]+(\.[0-9]+)*/
