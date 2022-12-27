@@ -31,15 +31,27 @@ const Header = ({ ...props }) => {
     return null;
   }
   return (
-    <div>
-      <div class="header py-4">
-        <div class="container">
-          <div class="d-flex">
+    <>
+      <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar-menu"
+            aria-controls="navbar-menu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
             <a class="header-brand" href="/dashboard">
               <Localizer>
                 <img
                   src="/assets/icons/favicon-96x96.png"
-                  class="header-brand-img"
+                  class="navbar-brand-image"
+                  height="32"
                   alt={<Text id="global.logoAlt" />}
                 />
               </Localizer>
@@ -47,121 +59,151 @@ const Header = ({ ...props }) => {
                 <Text id="header.gladysAssistant" />
               </span>
             </a>
-            <div class="d-flex order-lg-2 ml-auto">
-              <div class={cx('dropdown', { show: props.showDropDown })}>
-                <a onClick={props.toggleDropDown} class="nav-link pr-0 leading-none" data-toggle="dropdown">
-                  <span class="avatar" style={`background-image: url(${props.profilePicture})`} />
-                  <span class="ml-2 d-none d-lg-block">
-                    <span class="text-default">{props.user.firstname}</span>
-                    <small class="text-muted d-block mt-1">
-                      {props.user.role === USER_ROLE.ADMIN && <Text id="profile.adminRole" />}
-                      {props.user.role !== USER_ROLE.ADMIN && <Text id="profile.userRole" />}
-                    </small>
-                  </span>
-                </a>
-                <div
-                  class={cx('dropdown-menu', 'dropdown-menu-right', 'dropdown-menu-arrow', {
-                    show: props.showDropDown
-                  })}
+          </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="d-none d-md-flex">
+              <a
+                href="?theme=dark"
+                class="nav-link px-0 hide-theme-dark"
+                title="Enable dark mode"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 >
-                  <a class="dropdown-item" href="/dashboard/profile">
-                    <i class="dropdown-icon fe fe-user" /> <Text id="header.profile" />
-                  </a>
-                  {props.user.role === USER_ROLE.ADMIN && (
-                    <a class="dropdown-item" href="/dashboard/settings/house">
-                      <i class="dropdown-icon fe fe-settings" /> <Text id="header.settings" />
-                    </a>
-                  )}
-                  <div class="dropdown-divider" />
-                  <a
-                    class="dropdown-item"
-                    href="https://community.gladysassistant.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <i class="dropdown-icon fe fe-help-circle" /> <Text id="header.needHelp" />
-                  </a>
-                  <a class="dropdown-item" href="" onClick={props.logout}>
-                    <i class="dropdown-icon fe fe-log-out" /> <Text id="header.signOut" />
-                  </a>
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                </svg>
+              </a>
+              <a
+                href="?theme=light"
+                class="nav-link px-0 hide-theme-light"
+                title="Enable light mode"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                </svg>
+              </a>
+            </div>
+            <div class={cx('nav-item', 'dropdown', { show: props.showDropDown })}>
+              <a onClick={props.toggleDropDown} class="nav-link d-flex lh-1 text-reset p-0" data-toggle="dropdown">
+                <span class="avatar avatar-sm" style={`background-image: url(${props.profilePicture})`}></span>
+                <div class="d-none d-xl-block ps-2">
+                  <div>{props.user.firstname}</div>
+                  <div class="mt-1 small text-muted">
+                    {props.user.role === USER_ROLE.ADMIN && <Text id="profile.adminRole" />}
+                    {props.user.role !== USER_ROLE.ADMIN && <Text id="profile.userRole" />}
+                  </div>
                 </div>
+              </a>
+              <div
+                class={cx('dropdown-menu', 'dropdown-menu-right', 'dropdown-menu-arrow', {
+                  show: props.showDropDown
+                })}
+              >
+                <a class="dropdown-item" href="/dashboard/profile">
+                  <i class="dropdown-icon fe fe-user" /> <Text id="header.profile" />
+                </a>
+                {props.user.role === USER_ROLE.ADMIN && (
+                  <a class="dropdown-item" href="/dashboard/settings/house">
+                    <i class="dropdown-icon fe fe-settings" /> <Text id="header.settings" />
+                  </a>
+                )}
+                <div class="dropdown-divider" />
+                <a
+                  class="dropdown-item"
+                  href="https://community.gladysassistant.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i class="dropdown-icon fe fe-help-circle" /> <Text id="header.needHelp" />
+                </a>
+                <a class="dropdown-item" href="" onClick={props.logout}>
+                  <i class="dropdown-icon fe fe-log-out" /> <Text id="header.signOut" />
+                </a>
               </div>
             </div>
-            <a
-              class="header-toggler d-lg-none ml-3 ml-lg-0"
-              data-toggle="collapse"
-              data-target="#headerMenuCollapse"
-              onClick={props.toggleCollapsedMenu}
-            >
-              <span class="header-toggler-icon" />
-            </a>
           </div>
         </div>
-      </div>
-      <div
-        class={cx('header', 'collapse', 'd-lg-flex', 'p-0', { show: props.showCollapsedMenu })}
-        id="headerMenuCollapse"
-      >
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-lg order-lg-first">
-              <ul class="nav nav-tabs border-0 flex-column flex-lg-row">
-                <li class="nav-item">
-                  <Link
-                    href="/dashboard"
-                    class={cx('nav-link', {
-                      active: props.currentUrl === '/dashboard'
-                    })}
-                  >
-                    <i class="fe fe-home" /> <Text id="header.home" />
+      </header>
+      <div class="navbar-expand-md">
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <div class="navbar navbar-light">
+            <div class="container-xl">
+              <ul class="navbar-nav">
+                <li class={cx('nav-item', { active: props.currentUrl === '/dashboard' })}>
+                  <Link href="/dashboard" class="nav-link">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="fe fe-home" />
+                    </span>
+                    <Text class="nav-link-title" id="header.home" />
                   </Link>
                 </li>
-                <li class="nav-item">
-                  <Link
-                    href="/dashboard/chat"
-                    class={cx('nav-link', {
-                      active: props.currentUrl === '/dashboard/chat'
-                    })}
-                  >
-                    <i class="fe fe-message-square" /> <Text id="header.chat" />
+                <li class={cx('nav-item', { active: props.currentUrl === '/dashboard/chat' })}>
+                  <Link href="/dashboard/chat" class="nav-link">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="fe fe-message-square" />
+                    </span>
+                    <Text class="nav-link-title" id="header.chat" />
                   </Link>
                 </li>
-                <li class="nav-item">
-                  <Link
-                    href="/dashboard/integration"
-                    class={props.currentUrl.startsWith('/dashboard/integration') ? 'active nav-link' : 'nav-link'}
-                  >
-                    <i class="fe fe-grid" /> <Text id="header.integrations" />
+                <li class={cx('nav-item', { active: props.currentUrl === '/dashboard/integration' })}>
+                  <Link href="/dashboard/integration" class="nav-link">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="fe fe-grid" />
+                    </span>{' '}
+                    <Text id="header.integrations" />
                   </Link>
                 </li>
-                <li class="nav-item">
-                  <Link
-                    href="/dashboard/calendar"
-                    class={cx('nav-link', {
-                      active: props.currentUrl === '/dashboard/calendar'
-                    })}
-                  >
-                    <i class="fe fe-calendar" /> <Text id="header.calendar" />
+                <li class={cx('nav-item', { active: props.currentUrl === '/dashboard/calendar' })}>
+                  <Link href="/dashboard/calendar" class="nav-link">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      {' '}
+                      <i class="fe fe-calendar" />
+                    </span>{' '}
+                    <Text id="header.calendar" />
                   </Link>
                 </li>
-                <li class="nav-item">
-                  <Link
-                    activeClassName="active"
-                    href="/dashboard/maps"
-                    class={cx('nav-link', {
-                      active: props.currentUrl === '/dashboard/maps'
-                    })}
-                  >
-                    <i class="fe fe-map" /> <Text id="header.maps" />
+                <li class={cx('nav-item', { active: props.currentUrl === '/dashboard/maps' })}>
+                  <Link activeClassName="active" href="/dashboard/maps" class="nav-link">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                      <i class="fe fe-map" />{' '}
+                    </span>
+                    <Text id="header.maps" />
                   </Link>
                 </li>
                 {props.user.role === USER_ROLE.ADMIN && (
-                  <li class="nav-item">
-                    <Link
-                      href="/dashboard/scene"
-                      class={props.currentUrl.startsWith('/dashboard/scene') ? 'active nav-link' : 'nav-link'}
-                    >
-                      <i class="fe fe-play" /> <Text id="header.scenes" />
+                  <li class={cx('nav-item', { active: props.currentUr === '/dashboard/scene' })}>
+                    <Link href="/dashboard/scene" class="nav-link">
+                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <i class="fe fe-play" />
+                      </span>
+                      <Text id="header.scenes" />
                     </Link>
                   </li>
                 )}
@@ -170,7 +212,7 @@ const Header = ({ ...props }) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
