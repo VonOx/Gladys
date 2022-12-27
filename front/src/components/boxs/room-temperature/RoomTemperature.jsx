@@ -10,24 +10,31 @@ import { WEBSOCKET_MESSAGE_TYPES } from '../../../../../server/utils/constants';
 const isNotNullOrUndefined = value => value !== undefined && value !== null;
 
 const RoomTemperatureBox = ({ children, ...props }) => (
-  <div class="card p-3">
-    <div class="d-flex align-items-center">
-      <span class="stamp stamp-md bg-blue mr-3">
-        <i class="fe fe-thermometer" />
-      </span>
-      <div>
-        {props.valued && (
-          <h4 class="m-0">
-            <Text id="global.degreeValue" fields={{ value: Number(props.temperature).toFixed(1) }} />
-            <Text id={`global.${props.unit}`} />
-          </h4>
-        )}
-        {!props.valued && (
-          <p class="m-0">
-            <Text id="dashboard.boxes.temperatureInRoom.noTemperatureRecorded" />
-          </p>
-        )}
-        <small class="text-muted">{props.roomName}</small>
+  <div class="card card-sm">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <span class="bg-blue text-white avatar">
+            <i class="fe fe-thermometer" />
+          </span>
+        </div>
+        <div class="col">
+          <div class="font-weight-medium">
+            {props.valued && (
+              <h4 class="m-0">
+                <Text id="global.degreeValue" fields={{ value: Number(props.temperature).toFixed(1) }} />
+                <Text id={`global.${props.unit}`} />
+              </h4>
+            )}
+            {!props.valued && (
+              <p class="m-0">
+                <Text id="dashboard.boxes.temperatureInRoom.noTemperatureRecorded" />
+              </p>
+            )}
+          </div>
+          <div class="text-muted">{props.roomName}</div>
+        </div>
+        <div class="col-auto"></div>
       </div>
     </div>
   </div>

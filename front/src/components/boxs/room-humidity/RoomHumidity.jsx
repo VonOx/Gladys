@@ -10,35 +10,42 @@ import { WEBSOCKET_MESSAGE_TYPES } from '../../../../../server/utils/constants';
 const isNotNullOrUndefined = value => value !== undefined && value !== null;
 
 const RoomHumidityBox = ({ children, ...props }) => (
-  <div class="card p-3">
-    <div class="d-flex align-items-center">
-      {props.humidity > 45 && props.humidity < 60 && (
-        <span class="stamp stamp-md bg-green mr-3">
-          <i class="fe fe-droplet" />
-        </span>
-      )}
-      {props.humidity <= 45 && (
-        <span class="stamp stamp-md bg-yellow mr-3">
-          <i class="fe fe-droplet" />
-        </span>
-      )}
-      {props.humidity >= 60 && (
-        <span class="stamp stamp-md bg-blue mr-3">
-          <i class="fe fe-droplet" />
-        </span>
-      )}
-      <div>
-        {isNotNullOrUndefined(props.humidity) && (
-          <h4 class="m-0">
-            <Text id="global.percentValue" fields={{ value: Math.round(props.humidity) }} />
-          </h4>
-        )}
-        {!isNotNullOrUndefined(props.humidity) && (
-          <p class="m-0">
-            <Text id="dashboard.boxes.humidityInRoom.noHumidityRecorded" />
-          </p>
-        )}
-        <small class="text-muted">{props.roomName}</small>
+  <div class="card card-sm">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          {props.humidity > 45 && props.humidity < 60 && (
+            <span class="bg-green text-white avatar">
+              <i class="fe fe-droplet" />
+            </span>
+          )}
+          {props.humidity <= 45 && (
+            <span class="bg-yellow text-white avatar">
+              <i class="fe fe-droplet" />
+            </span>
+          )}
+          {props.humidity >= 60 && (
+            <span class="bg-blue text-white avatar">
+              <i class="fe fe-droplet" />
+            </span>
+          )}
+        </div>
+        <div class="col">
+          <div class="font-weight-medium">
+            {isNotNullOrUndefined(props.humidity) && (
+              <h4 class="m-0">
+                <Text id="global.percentValue" fields={{ value: Math.round(props.humidity) }} />
+              </h4>
+            )}
+            {!isNotNullOrUndefined(props.humidity) && (
+              <p class="m-0">
+                <Text id="dashboard.boxes.humidityInRoom.noHumidityRecorded" />
+              </p>
+            )}
+          </div>
+          <div class="text-muted">{props.roomName}</div>
+        </div>
+        <div class="col-auto"></div>
       </div>
     </div>
   </div>
