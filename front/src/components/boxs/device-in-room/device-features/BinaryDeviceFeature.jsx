@@ -20,16 +20,14 @@ const BinaryDeviceType = ({ children, ...props }) => {
       </td>
       <td>{getDeviceName(props.device, props.deviceFeature)}</td>
       <td class="text-right">
-        <label class="custom-switch">
+        <label class="form-check form-switch">
           <input
-            type="radio"
-            name={props.deviceFeature.id}
+            class="form-check-input"
+            type="checkbox"
             value="1"
-            class="custom-switch-input"
             checked={props.deviceFeature.last_value}
             onClick={updateValue}
           />
-          <span class="custom-switch-indicator" />
         </label>
       </td>
     </tr>
