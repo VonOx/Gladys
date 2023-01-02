@@ -31,20 +31,18 @@ const MultiLevelDeviceType = ({ children, ...props }) => {
       <td>{getDeviceName(props.device, props.deviceFeature)}</td>
 
       <td class="text-right" style="padding-top: 0px; padding-bottom: 0px">
-        
-          <input
-            style={{
-              minHeight: '30px'
-            }}
-            type="range"
-            value={props.deviceFeature.last_value}
-            onChange={updateValue}
-            class="form-range mb-2"
-            step="1"
-            min={props.deviceFeature.min}
-            max={props.deviceFeature.max}
-          />
-     
+        <input
+          style={{
+            minHeight: '30px'
+          }}
+          type="range"
+          value={props.deviceFeature.last_value}
+          onChange={updateValue}
+          class="form-range mb-2"
+          step="1"
+          min={props.deviceFeature.min}
+          max={props.deviceFeature.max}
+        />
       </td>
     </tr>
   );

@@ -8,7 +8,9 @@ import get from 'get-value';
 
 const CameraBox = ({ children, ...props }) => (
   <div class="card">
-    {props.image && <img class="card-img-top" src={`data:${props.image}`} alt={props.roomName} />}
+    {props.image && (
+      <img class="img-responsive img-responsive-21x9 card-img-top" src={`data:${props.image}`} alt={props.roomName} />
+    )}
     {props.error && (
       <div>
         <p class="alert alert-danger">
@@ -19,14 +21,14 @@ const CameraBox = ({ children, ...props }) => (
         </p>
       </div>
     )}
-    <div class="card-body d-flex flex-column">
+    <div class="card-body">
       {!props.image && props.boxStatus === RequestStatus.Getting && (
         <div class="dimmer active">
           <div class="dimmer-content" style={{ height: '100px' }} />
           <div class="loader" />
         </div>
       )}
-      <h4>{props.box && props.box.name}</h4>
+      <h3 class="card-title">{props.box && props.box.name}</h3>
     </div>
   </div>
 );

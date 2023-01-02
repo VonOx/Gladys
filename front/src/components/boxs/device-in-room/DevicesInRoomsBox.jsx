@@ -43,12 +43,12 @@ const DeviceInRoomCard = ({ children, ...props }) => {
         <h3 class="card-title">{roomName}</h3>
         {hasBinaryLightDeviceFeature && (
           <div class="card-options">
-            <label class="custom-switch m-0">
+            <label class="form-check form-switch m-0">
               <input
                 type="checkbox"
                 name={boxData.room.selector}
                 value="1"
-                class="custom-switch-input"
+                class="form-check-input"
                 checked={boxData.roomLightStatus === 1}
                 onClick={changeAllLightsStatusRoom(props, boxData)}
               />
