@@ -13,19 +13,19 @@ const marginBottom = {
 };
 
 const DashboardPage = ({ children, ...props }) => (
-  <div class="page">
-    <div class="page-main">
-      <div class={props.loading ? 'dimmer active' : 'dimmer'}>
-        <div class="loader" />
-        <div class="dimmer-content">
-          <div class="my-3 my-md-5">
-            <div class="container" style={props.dashboardEditMode ? marginBottom : {}}>
-              {!props.dashboardEditMode && (
-                <div class="page-header">
+  <div class="container-xl">
+    <div class={props.loading ? 'dimmer active' : 'dimmer'}>
+      <div class="loader" />
+      <div class="dimmer-content">
+        <div style={props.dashboardEditMode ? marginBottom : {}}>
+          {!props.dashboardEditMode && (
+            <div class="page-header d-print-none">
+              <div class="row align-items-center">
+                <div class="col">
                   <div class="page-title">
                     {!props.dashboardListEmpty && (
                       <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" onClick={props.toggleDashboardDropdown}>
+                        <button class="btn dropdown-toggle" onClick={props.toggleDashboardDropdown}>
                           {props.currentDashboard && props.currentDashboard.name}
                         </button>
                         <div
@@ -46,10 +46,11 @@ const DashboardPage = ({ children, ...props }) => (
                       </div>
                     )}
                   </div>
-
-                  <div class="page-options d-flex align-content-between flex-wrap">
+                </div>
+                <div class="col-auto ms-auto">
+                  <div class="btn-list">
                     {!props.dashboardNotConfigured && props.browserFullScreenCompatible && (
-                      <button onClick={props.toggleFullScreen} class={cx('btn btn-outline-secondary ml-2 btn-sm')}>
+                      <button onClick={props.toggleFullScreen} class={cx('btn btn-outline-secondary btn-sm')}>
                         <span>
                           {!props.fullScreen && <Text id="dashboard.enableFullScreen" />}
                           {props.fullScreen && <Text id="dashboard.disableFullScreen" />}{' '}
@@ -61,7 +62,7 @@ const DashboardPage = ({ children, ...props }) => (
                     {props.currentDashboard && (
                       <button
                         onClick={props.editDashboard}
-                        class={cx('btn btn-outline-primary ml-2', style.smallButtonOnBigScreen)}
+                        class={cx('btn btn-outline-primary btn-sm', style.smallButtonOnBigScreen)}
                       >
                         <span>
                           <Text id="dashboard.editDashboardButton" /> <i class="fe fe-edit" />
@@ -70,7 +71,7 @@ const DashboardPage = ({ children, ...props }) => (
                     )}
                     <Link
                       href="/dashboard/create/new"
-                      class={cx('btn btn-outline-success ml-2', style.smallButtonOnBigScreen)}
+                      class={cx('btn btn-outline-success btn-sm', style.smallButtonOnBigScreen)}
                     >
                       <span>
                         <Text id="dashboard.newDashboardButton" /> <i class="fe fe-plus" />
@@ -78,35 +79,35 @@ const DashboardPage = ({ children, ...props }) => (
                     </Link>
                   </div>
                 </div>
-              )}
-              {props.gatewayInstanceNotFound && (
-                <div class="alert alert-warning">
-                  <Text id="dashboard.gatewayInstanceNotFoundError" />
-                </div>
-              )}
-              {props.dashboardNotConfigured && !props.dashboardEditMode && (
-                <EmptyState dashboardListEmpty={props.dashboardListEmpty} />
-              )}
-              {!props.dashboardNotConfigured && !props.dashboardEditMode && (
-                <BoxColumns homeDashboard={props.currentDashboard} />
-              )}
-              {props.dashboardEditMode && (
-                <EditBoxColumns
-                  updateCurrentDashboardName={props.updateCurrentDashboardName}
-                  editDashboardDragEnable={props.editDashboardDragEnable}
-                  moveCard={props.moveCard}
-                  moveBoxUp={props.moveBoxUp}
-                  moveBoxDown={props.moveBoxDown}
-                  addBox={props.addBox}
-                  homeDashboard={props.currentDashboard}
-                  updateNewSelectedBox={props.updateNewSelectedBox}
-                  removeBox={props.removeBox}
-                  updateBoxConfig={props.updateBoxConfig}
-                />
-              )}
-              {props.dashboardEditMode && <EditActions {...props} />}
+              </div>
             </div>
-          </div>
+          )}
+          {props.gatewayInstanceNotFound && (
+            <div class="alert alert-warning">
+              <Text id="dashboard.gatewayInstanceNotFoundError" />
+            </div>
+          )}
+          {props.dashboardNotConfigured && !props.dashboardEditMode && (
+            <EmptyState dashboardListEmpty={props.dashboardListEmpty} />
+          )}
+          {!props.dashboardNotConfigured && !props.dashboardEditMode && (
+            <BoxColumns homeDashboard={props.currentDashboard} />
+          )}
+          {props.dashboardEditMode && (
+            <EditBoxColumns
+              updateCurrentDashboardName={props.updateCurrentDashboardName}
+              editDashboardDragEnable={props.editDashboardDragEnable}
+              moveCard={props.moveCard}
+              moveBoxUp={props.moveBoxUp}
+              moveBoxDown={props.moveBoxDown}
+              addBox={props.addBox}
+              homeDashboard={props.currentDashboard}
+              updateNewSelectedBox={props.updateNewSelectedBox}
+              removeBox={props.removeBox}
+              updateBoxConfig={props.updateBoxConfig}
+            />
+          )}
+          {props.dashboardEditMode && <EditActions {...props} />}
         </div>
       </div>
     </div>
