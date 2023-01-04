@@ -126,152 +126,146 @@ const AppRouter = connect(
   'currentUrl,user,profilePicture,showDropDown,showCollapsedMenu,fullScreen',
   actions
 )(props => (
-  <div id="app">
-    <Layout currentUrl={props.currentUrl}>
-      <Header
-        currentUrl={props.currentUrl}
-        user={props.user}
-        fullScreen={props.fullScreen}
-        profilePicture={props.profilePicture}
-        toggleDropDown={props.toggleDropDown}
-        showDropDown={props.showDropDown}
-        toggleCollapsedMenu={props.toggleCollapsedMenu}
-        showCollapsedMenu={props.showCollapsedMenu}
-        logout={props.logout}
-      />
-      <Router onChange={props.handleRoute}>
-        <Redirect path="/" to="/dashboard" />
-        {/** ROUTE WHICH ARE DIFFERENT IN GATEWAY MODE */}
-        {config.gatewayMode ? <LoginGateway path="/login" /> : <Login path="/login" />}
-        {config.gatewayMode ? (
-          <GatewayForgotPassword path="/forgot-password" />
-        ) : (
-          <ForgotPassword path="/forgot-password" />
-        )}
-        {config.gatewayMode ? (
-          <GatewayResetPassword path="/reset-password" />
-        ) : (
-          <ResetPassword path="/reset-password" />
-        )}
-        {config.gatewayMode ? <LinkGatewayUser path="/link-gateway-user" /> : <Error type="404" default />}
-        {config.gatewayMode ? <SignupGateway path="/signup-gateway" /> : <Error type="404" default />}
-        {config.gatewayMode ? (
-          <ConfigureTwoFactorGateway path="/gateway-configure-two-factor" />
-        ) : (
-          <Error type="404" default />
-        )}
-        {config.gatewayMode ? <GatewayConfirmEmail path="/confirm-email" /> : <Error type="404" default />}
-        {config.gatewayMode ? <SettingsBilling path="/dashboard/settings/billing" /> : <Error type="404" default />}
-        {config.gatewayMode ? (
-          <SettingsGatewayUsers path="/dashboard/settings/gateway-users" />
-        ) : (
-          <Error type="404" default />
-        )}
-        {config.gatewayMode ? (
-          <SettingsGatewayOpenApi path="/dashboard/settings/gateway-open-api" />
-        ) : (
-          <Error type="404" default />
-        )}
-
-        {!config.gatewayMode ? <SignupWelcomePage path="/signup" /> : <Error type="404" default />}
-        <SignupCreateAccountLocal path="/signup/create-account-local" />
-        <SignupCreateAccountGladysGateway path="/signup/create-account-gladys-gateway" />
-        <SignupPreferences path="/signup/preference" />
-        <SignupConfigureHouse path="/signup/configure-house" />
-        <SignupSuccess path="/signup/success" />
-        <Dashboard path="/dashboard" />
-        <Dashboard path="/dashboard/:dashboardSelector" />
-        <NewDashboard path="/dashboard/create/new" />
-        <Device path="/dashboard/device" />
-        <IntegrationPage path="/dashboard/integration" />
-
-        <IntegrationPage path="/dashboard/integration/device" category="device" />
-        <IntegrationPage path="/dashboard/integration/communication" category="communication" />
-        <IntegrationPage path="/dashboard/integration/calendar" category="calendar" />
-        <IntegrationPage path="/dashboard/integration/music" category="music" />
-        <IntegrationPage path="/dashboard/integration/health" category="health" />
-        <IntegrationPage path="/dashboard/integration/weather" category="weather" />
-        <IntegrationPage path="/dashboard/integration/navigation" category="navigation" />
-
-        <TelegramPage path="/dashboard/integration/communication/telegram" />
-        <Redirect path="/dashboard/integration/calendar/caldav" to="/dashboard/integration/calendar/caldav/account" />
-        <CalDAVAccountPage path="/dashboard/integration/calendar/caldav/account" />
-        <CalDAVSyncPage path="/dashboard/integration/calendar/caldav/sync" />
-        <CalDAVSharePage path="/dashboard/integration/calendar/caldav/share" />
-        <OpenWeatherPage path="/dashboard/integration/weather/openweather" />
-        <Redirect
-          path="/dashboard/integration/device/philips-hue"
-          to="/dashboard/integration/device/philips-hue/device"
-        />
-        <PhilipsHueSetupPage path="/dashboard/integration/device/philips-hue/setup" />
-        <PhilipsHueDevicePage path="/dashboard/integration/device/philips-hue/device" />
-        <Redirect path="/dashboard/integration/device/tp-link" to="/dashboard/integration/device/tp-link/device" />
-        <TPLinkDevicePage path="/dashboard/integration/device/tp-link/device" />
-        <Redirect path="/dashboard/integration/device/zwave" to="/dashboard/integration/device/zwave/node" />
-        <ZwaveNodePage path="/dashboard/integration/device/zwave/node" />
-        <RtspCameraPage path="/dashboard/integration/device/rtsp-camera" />
-        <MqttDevicePage path="/dashboard/integration/device/mqtt" />
-        <MqttDeviceSetupPage path="/dashboard/integration/device/mqtt/edit" />
-        <MqttDeviceSetupPage path="/dashboard/integration/device/mqtt/edit/:deviceSelector" />
-        <MqttSetupPage path="/dashboard/integration/device/mqtt/setup" />
-        <Zigbee2mqttPage path="/dashboard/integration/device/zigbee2mqtt" />
-        <Zigbee2mqttDiscoverPage path="/dashboard/integration/device/zigbee2mqtt/discover" />
-        <Zigbee2mqttSettingsPage path="/dashboard/integration/device/zigbee2mqtt/settings" />
-        <Zigbee2mqttSetupPage path="/dashboard/integration/device/zigbee2mqtt/setup" />
-        <Zigbee2mqttEditPage path="/dashboard/integration/device/zigbee2mqtt/edit/:deviceSelector" />
-        <XiaomiPage path="/dashboard/integration/device/xiaomi" />
-        <EditXiaomiPage path="/dashboard/integration/device/xiaomi/edit/:deviceSelector" />
-        <TasmotaPage path="/dashboard/integration/device/tasmota" />
-        <TasmotaEditPage path="/dashboard/integration/device/tasmota/edit/:deviceSelector" />
-        <TasmotaMqttDiscoverPage path="/dashboard/integration/device/tasmota/mqtt" />
-        <TasmotaHttpDiscoverPage path="/dashboard/integration/device/tasmota/http" />
-        <EweLinkPage path="/dashboard/integration/device/ewelink" />
-        <EweLinkEditPage path="/dashboard/integration/device/ewelink/edit/:deviceSelector" />
-        <EweLinkDiscoverPage path="/dashboard/integration/device/ewelink/discover" />
-        <EweLinkSetupPage path="/dashboard/integration/device/ewelink/setup" />
-        <HomeKitPage path="/dashboard/integration/communication/homekit" />
-
-        <BluetoothDevicePage path="/dashboard/integration/device/bluetooth" />
-        <BluetoothEditDevicePage path="/dashboard/integration/device/bluetooth/:deviceSelector" />
-        <BluetoothSetupPage path="/dashboard/integration/device/bluetooth/setup" />
-        <BluetoothSetupPeripheralPage path="/dashboard/integration/device/bluetooth/setup/:uuid" />
-        <BluetoothSettingsPage path="/dashboard/integration/device/bluetooth/config" />
-
-        <BroadlinkDevicePage path="/dashboard/integration/device/broadlink" />
-        <BroadlinkRemoteSetupPage path="/dashboard/integration/device/broadlink/edit" />
-        <BroadlinkRemoteSetupPage path="/dashboard/integration/device/broadlink/edit/:deviceSelector" />
-        <BroadlinkPeripheralPage path="/dashboard/integration/device/broadlink/peripheral" />
-
-        <GoogleHomeWelcomePage path="/dashboard/integration/communication/googlehome" />
-        <GoogleHomeGateway path="/dashboard/integration/device/google-home/authorize" />
-        <AlexaWelcomePage path="/dashboard/integration/communication/alexa" />
-        <OwntracksWelcomePage path="/dashboard/integration/device/owntracks" />
-        <AlexaGateway path="/dashboard/integration/device/alexa/authorize" />
-
-        <ChatPage path="/dashboard/chat" />
-        <MapPage path="/dashboard/maps" />
-        <MapNewAreaPage path="/dashboard/maps/area/new" />
-        <MapNewAreaPage path="/dashboard/maps/area/edit/:areaSelector" />
-        <CalendarPage path="/dashboard/calendar" />
-        <ScenePage path="/dashboard/scene" />
-        <NewScenePage path="/dashboard/scene/new" />
-        <DuplicateScenePage path="/dashboard/scene/:scene_selector/duplicate" />
-        <EditScenePage path="/dashboard/scene/:scene_selector" />
-        <ProfilePage path="/dashboard/profile" />
-        <SettingsSessionPage path="/dashboard/settings/session" />
-        <SettingsHousePage path="/dashboard/settings/house" />
-        <SettingsUserPage path="/dashboard/settings/user" />
-        <SettingsEditUserPage path="/dashboard/settings/user/edit/:user_selector" />
-        <SettingsCreateUserPage path="/dashboard/settings/user/new" />
-        <SettingsSystemPage path="/dashboard/settings/system" />
-        <SettingsGateway path="/dashboard/settings/gateway" />
-        <SettingsServicePage path="/dashboard/settings/service" />
-        <SettingsBackup path="/dashboard/settings/backup" />
-        <SettingsBackgroundJobs path="/dashboard/settings/jobs" />
+  <Layout currentUrl={props.currentUrl}>
+    <Header
+      currentUrl={props.currentUrl}
+      user={props.user}
+      fullScreen={props.fullScreen}
+      profilePicture={props.profilePicture}
+      toggleDropDown={props.toggleDropDown}
+      showDropDown={props.showDropDown}
+      toggleCollapsedMenu={props.toggleCollapsedMenu}
+      showCollapsedMenu={props.showCollapsedMenu}
+      logout={props.logout}
+    />
+    <Router onChange={props.handleRoute}>
+      <Redirect path="/" to="/dashboard" />
+      {/** ROUTE WHICH ARE DIFFERENT IN GATEWAY MODE */}
+      {config.gatewayMode ? <LoginGateway path="/login" /> : <Login path="/login" />}
+      {config.gatewayMode ? (
+        <GatewayForgotPassword path="/forgot-password" />
+      ) : (
+        <ForgotPassword path="/forgot-password" />
+      )}
+      {config.gatewayMode ? <GatewayResetPassword path="/reset-password" /> : <ResetPassword path="/reset-password" />}
+      {config.gatewayMode ? <LinkGatewayUser path="/link-gateway-user" /> : <Error type="404" default />}
+      {config.gatewayMode ? <SignupGateway path="/signup-gateway" /> : <Error type="404" default />}
+      {config.gatewayMode ? (
+        <ConfigureTwoFactorGateway path="/gateway-configure-two-factor" />
+      ) : (
         <Error type="404" default />
-      </Router>
-    </Layout>
-  </div>
+      )}
+      {config.gatewayMode ? <GatewayConfirmEmail path="/confirm-email" /> : <Error type="404" default />}
+      {config.gatewayMode ? <SettingsBilling path="/dashboard/settings/billing" /> : <Error type="404" default />}
+      {config.gatewayMode ? (
+        <SettingsGatewayUsers path="/dashboard/settings/gateway-users" />
+      ) : (
+        <Error type="404" default />
+      )}
+      {config.gatewayMode ? (
+        <SettingsGatewayOpenApi path="/dashboard/settings/gateway-open-api" />
+      ) : (
+        <Error type="404" default />
+      )}
+
+      {!config.gatewayMode ? <SignupWelcomePage path="/signup" /> : <Error type="404" default />}
+      <SignupCreateAccountLocal path="/signup/create-account-local" />
+      <SignupCreateAccountGladysGateway path="/signup/create-account-gladys-gateway" />
+      <SignupPreferences path="/signup/preference" />
+      <SignupConfigureHouse path="/signup/configure-house" />
+      <SignupSuccess path="/signup/success" />
+      <Dashboard path="/dashboard" />
+      <Dashboard path="/dashboard/:dashboardSelector" />
+      <NewDashboard path="/dashboard/create/new" />
+      <Device path="/dashboard/device" />
+      <IntegrationPage path="/dashboard/integration" />
+
+      <IntegrationPage path="/dashboard/integration/device" category="device" />
+      <IntegrationPage path="/dashboard/integration/communication" category="communication" />
+      <IntegrationPage path="/dashboard/integration/calendar" category="calendar" />
+      <IntegrationPage path="/dashboard/integration/music" category="music" />
+      <IntegrationPage path="/dashboard/integration/health" category="health" />
+      <IntegrationPage path="/dashboard/integration/weather" category="weather" />
+      <IntegrationPage path="/dashboard/integration/navigation" category="navigation" />
+
+      <TelegramPage path="/dashboard/integration/communication/telegram" />
+      <Redirect path="/dashboard/integration/calendar/caldav" to="/dashboard/integration/calendar/caldav/account" />
+      <CalDAVAccountPage path="/dashboard/integration/calendar/caldav/account" />
+      <CalDAVSyncPage path="/dashboard/integration/calendar/caldav/sync" />
+      <CalDAVSharePage path="/dashboard/integration/calendar/caldav/share" />
+      <OpenWeatherPage path="/dashboard/integration/weather/openweather" />
+      <Redirect
+        path="/dashboard/integration/device/philips-hue"
+        to="/dashboard/integration/device/philips-hue/device"
+      />
+      <PhilipsHueSetupPage path="/dashboard/integration/device/philips-hue/setup" />
+      <PhilipsHueDevicePage path="/dashboard/integration/device/philips-hue/device" />
+      <Redirect path="/dashboard/integration/device/tp-link" to="/dashboard/integration/device/tp-link/device" />
+      <TPLinkDevicePage path="/dashboard/integration/device/tp-link/device" />
+      <Redirect path="/dashboard/integration/device/zwave" to="/dashboard/integration/device/zwave/node" />
+      <ZwaveNodePage path="/dashboard/integration/device/zwave/node" />
+      <RtspCameraPage path="/dashboard/integration/device/rtsp-camera" />
+      <MqttDevicePage path="/dashboard/integration/device/mqtt" />
+      <MqttDeviceSetupPage path="/dashboard/integration/device/mqtt/edit" />
+      <MqttDeviceSetupPage path="/dashboard/integration/device/mqtt/edit/:deviceSelector" />
+      <MqttSetupPage path="/dashboard/integration/device/mqtt/setup" />
+      <Zigbee2mqttPage path="/dashboard/integration/device/zigbee2mqtt" />
+      <Zigbee2mqttDiscoverPage path="/dashboard/integration/device/zigbee2mqtt/discover" />
+      <Zigbee2mqttSettingsPage path="/dashboard/integration/device/zigbee2mqtt/settings" />
+      <Zigbee2mqttSetupPage path="/dashboard/integration/device/zigbee2mqtt/setup" />
+      <Zigbee2mqttEditPage path="/dashboard/integration/device/zigbee2mqtt/edit/:deviceSelector" />
+      <XiaomiPage path="/dashboard/integration/device/xiaomi" />
+      <EditXiaomiPage path="/dashboard/integration/device/xiaomi/edit/:deviceSelector" />
+      <TasmotaPage path="/dashboard/integration/device/tasmota" />
+      <TasmotaEditPage path="/dashboard/integration/device/tasmota/edit/:deviceSelector" />
+      <TasmotaMqttDiscoverPage path="/dashboard/integration/device/tasmota/mqtt" />
+      <TasmotaHttpDiscoverPage path="/dashboard/integration/device/tasmota/http" />
+      <EweLinkPage path="/dashboard/integration/device/ewelink" />
+      <EweLinkEditPage path="/dashboard/integration/device/ewelink/edit/:deviceSelector" />
+      <EweLinkDiscoverPage path="/dashboard/integration/device/ewelink/discover" />
+      <EweLinkSetupPage path="/dashboard/integration/device/ewelink/setup" />
+      <HomeKitPage path="/dashboard/integration/communication/homekit" />
+
+      <BluetoothDevicePage path="/dashboard/integration/device/bluetooth" />
+      <BluetoothEditDevicePage path="/dashboard/integration/device/bluetooth/:deviceSelector" />
+      <BluetoothSetupPage path="/dashboard/integration/device/bluetooth/setup" />
+      <BluetoothSetupPeripheralPage path="/dashboard/integration/device/bluetooth/setup/:uuid" />
+      <BluetoothSettingsPage path="/dashboard/integration/device/bluetooth/config" />
+
+      <BroadlinkDevicePage path="/dashboard/integration/device/broadlink" />
+      <BroadlinkRemoteSetupPage path="/dashboard/integration/device/broadlink/edit" />
+      <BroadlinkRemoteSetupPage path="/dashboard/integration/device/broadlink/edit/:deviceSelector" />
+      <BroadlinkPeripheralPage path="/dashboard/integration/device/broadlink/peripheral" />
+
+      <GoogleHomeWelcomePage path="/dashboard/integration/communication/googlehome" />
+      <GoogleHomeGateway path="/dashboard/integration/device/google-home/authorize" />
+      <AlexaWelcomePage path="/dashboard/integration/communication/alexa" />
+      <OwntracksWelcomePage path="/dashboard/integration/device/owntracks" />
+      <AlexaGateway path="/dashboard/integration/device/alexa/authorize" />
+
+      <ChatPage path="/dashboard/chat" />
+      <MapPage path="/dashboard/maps" />
+      <MapNewAreaPage path="/dashboard/maps/area/new" />
+      <MapNewAreaPage path="/dashboard/maps/area/edit/:areaSelector" />
+      <CalendarPage path="/dashboard/calendar" />
+      <ScenePage path="/dashboard/scene" />
+      <NewScenePage path="/dashboard/scene/new" />
+      <DuplicateScenePage path="/dashboard/scene/:scene_selector/duplicate" />
+      <EditScenePage path="/dashboard/scene/:scene_selector" />
+      <ProfilePage path="/dashboard/profile" />
+      <SettingsSessionPage path="/dashboard/settings/session" />
+      <SettingsHousePage path="/dashboard/settings/house" />
+      <SettingsUserPage path="/dashboard/settings/user" />
+      <SettingsEditUserPage path="/dashboard/settings/user/edit/:user_selector" />
+      <SettingsCreateUserPage path="/dashboard/settings/user/new" />
+      <SettingsSystemPage path="/dashboard/settings/system" />
+      <SettingsGateway path="/dashboard/settings/gateway" />
+      <SettingsServicePage path="/dashboard/settings/service" />
+      <SettingsBackup path="/dashboard/settings/backup" />
+      <SettingsBackgroundJobs path="/dashboard/settings/jobs" />
+      <Error type="404" default />
+    </Router>
+  </Layout>
 ));
 
 @connect('user', actions)

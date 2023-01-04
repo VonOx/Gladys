@@ -13,70 +13,72 @@ const marginBottom = {
 };
 
 const DashboardPage = ({ children, ...props }) => (
-  <div class="container-xl">
+  <div class="page-wrapper">
     <div class={props.loading ? 'dimmer active' : 'dimmer'}>
       <div class="loader" />
       <div class="dimmer-content">
         <div style={props.dashboardEditMode ? marginBottom : {}}>
           {!props.dashboardEditMode && (
-            <div class="page-header d-print-none">
-              <div class="row align-items-center">
-                <div class="col">
-                  <div class="page-title">
-                    {!props.dashboardListEmpty && (
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" onClick={props.toggleDashboardDropdown}>
-                          {props.currentDashboard && props.currentDashboard.name}
-                        </button>
-                        <div
-                          class={cx('dropdown-menu', {
-                            show: props.dashboardDropdownOpened
-                          })}
-                        >
-                          {props.dashboards.map(dashboard => (
-                            <Link
-                              class="dropdown-item"
-                              href={`/dashboard/${dashboard.selector}`}
-                              onClick={props.redirectToDashboard}
-                            >
-                              {dashboard.name}
-                            </Link>
-                          ))}
+            <div class="page-header" style="margin-bottom:1rem">
+              <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                  <div class="col">
+                    <div class="page-title">
+                      {!props.dashboardListEmpty && (
+                        <div class="dropdown">
+                          <button class="btn dropdown-toggle" onClick={props.toggleDashboardDropdown}>
+                            {props.currentDashboard && props.currentDashboard.name}
+                          </button>
+                          <div
+                            class={cx('dropdown-menu', {
+                              show: props.dashboardDropdownOpened
+                            })}
+                          >
+                            {props.dashboards.map(dashboard => (
+                              <Link
+                                class="dropdown-item"
+                                href={`/dashboard/${dashboard.selector}`}
+                                onClick={props.redirectToDashboard}
+                              >
+                                {dashboard.name}
+                              </Link>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div class="col-auto ms-auto">
-                  <div class="btn-list">
-                    {!props.dashboardNotConfigured && props.browserFullScreenCompatible && (
-                      <button onClick={props.toggleFullScreen} class={cx('btn btn-outline-secondary btn-sm')}>
-                        <span>
-                          {!props.fullScreen && <Text id="dashboard.enableFullScreen" />}
-                          {props.fullScreen && <Text id="dashboard.disableFullScreen" />}{' '}
-                          {!props.fullScreen && <i class="fe fe-maximize-2" />}
-                          {props.fullScreen && <i class="fe fe-minimize-2" />}
-                        </span>
-                      </button>
-                    )}
-                    {props.currentDashboard && (
-                      <button
-                        onClick={props.editDashboard}
-                        class={cx('btn btn-outline-primary btn-sm', style.smallButtonOnBigScreen)}
+                  <div class="col-auto ms-auto d-print-none">
+                    <div class="btn-list">
+                      {!props.dashboardNotConfigured && props.browserFullScreenCompatible && (
+                        <button onClick={props.toggleFullScreen} class={cx('btn btn-outline-secondary btn-sm')}>
+                          <span>
+                            {!props.fullScreen && <Text id="dashboard.enableFullScreen" />}
+                            {props.fullScreen && <Text id="dashboard.disableFullScreen" />}{' '}
+                            {!props.fullScreen && <i class="fe fe-maximize-2" />}
+                            {props.fullScreen && <i class="fe fe-minimize-2" />}
+                          </span>
+                        </button>
+                      )}
+                      {props.currentDashboard && (
+                        <button
+                          onClick={props.editDashboard}
+                          class={cx('btn btn-outline-primary btn-sm', style.smallButtonOnBigScreen)}
+                        >
+                          <span>
+                            <Text id="dashboard.editDashboardButton" /> <i class="fe fe-edit" />
+                          </span>
+                        </button>
+                      )}
+                      <Link
+                        href="/dashboard/create/new"
+                        class={cx('btn btn-outline-success btn-sm', style.smallButtonOnBigScreen)}
                       >
                         <span>
-                          <Text id="dashboard.editDashboardButton" /> <i class="fe fe-edit" />
+                          <Text id="dashboard.newDashboardButton" /> <i class="fe fe-plus" />
                         </span>
-                      </button>
-                    )}
-                    <Link
-                      href="/dashboard/create/new"
-                      class={cx('btn btn-outline-success btn-sm', style.smallButtonOnBigScreen)}
-                    >
-                      <span>
-                        <Text id="dashboard.newDashboardButton" /> <i class="fe fe-plus" />
-                      </span>
-                    </Link>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>

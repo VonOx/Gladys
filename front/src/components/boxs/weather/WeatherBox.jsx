@@ -27,68 +27,58 @@ const padding = {
 const BOX_REFRESH_INTERVAL_MS = 30 * 60 * 1000;
 
 const WeatherBox = ({ children, ...props }) => (
-  <div class="card">
-    {props.boxStatus === GetWeatherStatus.HouseHasNoCoordinates && (
-      <div>
-        <h4 class="card-header">
-          <Text id="dashboard.boxTitle.weather" />
-        </h4>
-        <div class="card-body">
+  <div class="card card-sm">
+    <div class="card-body">
+      {props.boxStatus === GetWeatherStatus.HouseHasNoCoordinates && (
+        <>
+          <div class="card-title">
+            <Text id="dashboard.boxTitle.weather" />
+          </div>
           <p class="alert alert-danger">
             <i class="fe fe-bell" />
             <span class="pl-2">
               <Text id="dashboard.boxes.weather.houseHasNoCoordinates" />
             </span>
           </p>
-        </div>
-      </div>
-    )}
-    {props.boxStatus === GetWeatherStatus.ServiceNotConfigured && (
-      <div>
-        <h4 class="card-header">
-          <Text id="dashboard.boxTitle.weather" />
-        </h4>
-        <div class="card-body">
+        </>
+      )}
+      {props.boxStatus === GetWeatherStatus.ServiceNotConfigured && (
+        <>
+          <div class="card-title">
+            <Text id="dashboard.boxTitle.weather" />
+          </div>
           <p class="alert alert-danger">
             <i class="fe fe-bell" />
             <span class="pl-2">
               <Text id="dashboard.boxes.weather.serviceNotConfigured" />
             </span>
           </p>
-        </div>
-      </div>
-    )}
-    {props.boxStatus === RequestStatus.Error && (
-      <div>
-        <h4 class="card-header">
-          <Text id="dashboard.boxTitle.weather" />
-        </h4>
-        <div class="card-body">
+        </>
+      )}
+      {props.boxStatus === RequestStatus.Error && (
+        <>
+          <h4 class="card-title">
+            <Text id="dashboard.boxTitle.weather" />
+          </h4>
           <p class="alert alert-danger">
             <i class="fe fe-bell" />
             <span class="pl-2">
               <Text id="dashboard.boxes.weather.unknownError" />
             </span>
           </p>
+        </>
+      )}
+      {props.boxStatus === RequestStatus.Getting && !props.weather && (
+        <div class="dimmer active">
+          <div class="loader" />
+          <div class="dimmer-content" style={padding} />
         </div>
-      </div>
-    )}
-    {props.boxStatus === RequestStatus.Getting && !props.weather && (
-      <div>
-        <div class="card-body">
-          <div class="dimmer active">
-            <div class="loader" />
-            <div class="dimmer-content" style={padding} />
-          </div>
-        </div>
-      </div>
-    )}
-    {props.boxStatus === GetWeatherStatus.RequestToThirdPartyFailed && (
-      <div>
-        <h4 class="card-header">
-          <Text id="dashboard.boxTitle.weather" />
-        </h4>
-        <div class="card-body">
+      )}
+      {props.boxStatus === GetWeatherStatus.RequestToThirdPartyFailed && (
+        <>
+          <h4 class="card-title">
+            <Text id="dashboard.boxTitle.weather" />
+          </h4>
           <p class="alert alert-danger">
             <i class="fe fe-bell" />
             <span class="pl-2">
@@ -98,117 +88,121 @@ const WeatherBox = ({ children, ...props }) => (
               </Link>
             </span>
           </p>
-        </div>
-      </div>
-    )}
-    {props.weather && (
-      <div style={padding} class="card-block px-30 py-10">
-        <div
-          style={{
-            fontSize: '14px',
-            color: '#76838f'
-          }}
-        >
-          {`${props.datetimeBeautiful} - ${props.houseName}`}
-        </div>
-        <div class="row">
-          <div class="col-9">
-            <div
-              style={{
-                fontSize: '40px',
-                lineHeight: '1.2'
-              }}
-              class="font-size-40 blue-grey-700"
-            >
-              <Text id="global.degreeValue" fields={{ value: props.temperature }} />
-              <span
-                style={{
-                  fontSize: '30px'
-                }}
-              >
-                {props.units === WEATHER_UNITS.METRIC ? <Text id="global.celsius" /> : <Text id="global.fahrenheit" />}
-              </span>
-            </div>
-          </div>
+        </>
+      )}
+      {props.weather && (
+        <div style={padding} class="card-block px-30 py-10">
           <div
-            class="col-3 text-right"
             style={{
-              paddingRight: '10px',
-              paddingLeft: '10px',
-              marginTop: '-0.75rem'
+              fontSize: '14px',
+              color: '#76838f'
             }}
           >
-            <i
-              className={cx('fe', props.weatherIcon)}
-              style={{
-                fontSize: '50px'
-              }}
-            />
+            {`${props.datetimeBeautiful} - ${props.houseName}`}
           </div>
-        </div>
-        {props.display_mode[GetWeatherModes.AdvancedWeather] && (
-          <div className="col-9" style={{ padding: '0' }}>
-            <span>
-              <i
-                class="fe fe-droplet"
+          <div class="row">
+            <div class="col-9">
+              <div
                 style={{
-                  fpaddingRight: '5px'
+                  fontSize: '40px',
+                  lineHeight: '1.2'
                 }}
-              />
-              {props.humidity}
-              <span
-                style={{
-                  fontSize: '12px',
-                  color: 'grey'
-                }}
+                class="font-size-40 blue-grey-700"
               >
-                <Text id="global.percent" />
-              </span>
-            </span>
-            <span className="float-right">
-              <i
-                class="fe fe-wind"
-                style={{
-                  paddingRight: '5px'
-                }}
-              />
-              {props.wind}
-              <span
-                style={{
-                  fontSize: '12px',
-                  color: 'grey'
-                }}
-              >
-                {props.units === WEATHER_UNITS.METRIC ? (
-                  <Text id="global.metersPerSec" />
-                ) : (
-                  <Text id="global.milesPerHour" />
-                )}
-              </span>
-            </span>
-          </div>
-        )}
-        {props.display_mode[GetWeatherModes.HourlyForecast] && (
-          <div>
+                <Text id="global.degreeValue" fields={{ value: props.temperature }} />
+                <span
+                  style={{
+                    fontSize: '30px'
+                  }}
+                >
+                  {props.units === WEATHER_UNITS.METRIC ? (
+                    <Text id="global.celsius" />
+                  ) : (
+                    <Text id="global.fahrenheit" />
+                  )}
+                </span>
+              </div>
+            </div>
             <div
-              class="row"
+              class="col-3 text-right"
               style={{
-                marginTop: '0.5em'
+                paddingRight: '10px',
+                paddingLeft: '10px',
+                marginTop: '-0.75rem'
               }}
             >
-              {props.hours_display}
+              <i
+                className={cx('fe', props.weatherIcon)}
+                style={{
+                  fontSize: '50px'
+                }}
+              />
             </div>
           </div>
-        )}
-        {props.display_mode[GetWeatherModes.DailyForecast] && (
-          <div>
-            <div class="row">
-              <div className="container">{props.days_display}</div>
+          {props.display_mode[GetWeatherModes.AdvancedWeather] && (
+            <div className="col-9" style={{ padding: '0' }}>
+              <span>
+                <i
+                  class="fe fe-droplet"
+                  style={{
+                    fpaddingRight: '5px'
+                  }}
+                />
+                {props.humidity}
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: 'grey'
+                  }}
+                >
+                  <Text id="global.percent" />
+                </span>
+              </span>
+              <span className="float-right">
+                <i
+                  class="fe fe-wind"
+                  style={{
+                    paddingRight: '5px'
+                  }}
+                />
+                {props.wind}
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: 'grey'
+                  }}
+                >
+                  {props.units === WEATHER_UNITS.METRIC ? (
+                    <Text id="global.metersPerSec" />
+                  ) : (
+                    <Text id="global.milesPerHour" />
+                  )}
+                </span>
+              </span>
             </div>
-          </div>
-        )}
-      </div>
-    )}
+          )}
+          {props.display_mode[GetWeatherModes.HourlyForecast] && (
+            <div>
+              <div
+                class="row"
+                style={{
+                  marginTop: '0.5em'
+                }}
+              >
+                {props.hours_display}
+              </div>
+            </div>
+          )}
+          {props.display_mode[GetWeatherModes.DailyForecast] && (
+            <div>
+              <div class="row">
+                <div className="container">{props.days_display}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   </div>
 );
 

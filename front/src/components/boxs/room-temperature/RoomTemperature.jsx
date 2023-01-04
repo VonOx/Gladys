@@ -10,7 +10,7 @@ import { WEBSOCKET_MESSAGE_TYPES } from '../../../../../server/utils/constants';
 const isNotNullOrUndefined = value => value !== undefined && value !== null;
 
 const RoomTemperatureBox = ({ children, ...props }) => (
-  <div class="card card-sm">
+  <div class="card card-sm" style="margin-bottom:1rem">
     <div class="card-body">
       <div class="row align-items-center">
         <div class="col-auto">
@@ -34,7 +34,6 @@ const RoomTemperatureBox = ({ children, ...props }) => (
           </div>
           <div class="text-muted">{props.roomName}</div>
         </div>
-        <div class="col-auto"></div>
       </div>
     </div>
   </div>

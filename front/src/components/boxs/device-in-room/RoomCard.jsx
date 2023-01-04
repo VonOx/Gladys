@@ -10,31 +10,33 @@ const RoomCard = ({ children, ...props }) => {
   return (
     <div class={cx('card', { 'card-collapsed': props.room.collapsed })} style="display: inline-block; min-width: 300px">
       <div class="card-header">
-        <h3 class="card-title">{props.room.name}</h3>
-        <div class="card-options">
+        <h3 class="">{props.room.name}</h3>
+        <div class="card-actions">
           <a href="" onClick={collapseRoom} class="card-options-collapse" data-toggle="card-collapse">
             <i class="fe fe-chevron-up" />
           </a>
         </div>
       </div>
-      <div class="table-responsive">
-        <table class="table card-table table-vcenter">
-          <tbody>
-            {props.room.devices.map((device, deviceIndex) =>
-              device.features.map((deviceFeature, deviceFeatureIndex) => (
-                <DeviceRow
-                  device={device}
-                  deviceFeature={deviceFeature}
-                  roomIndex={props.roomIndex}
-                  deviceIndex={deviceIndex}
-                  deviceFeatureIndex={deviceFeatureIndex}
-                  updateValue={props.updateValue}
-                  updateValueWithDebounce={props.updateValueWithDebounce}
-                />
-              ))
-            )}
-          </tbody>
-        </table>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table card-table table-vcenter">
+            <tbody>
+              {props.room.devices.map((device, deviceIndex) =>
+                device.features.map((deviceFeature, deviceFeatureIndex) => (
+                  <DeviceRow
+                    device={device}
+                    deviceFeature={deviceFeature}
+                    roomIndex={props.roomIndex}
+                    deviceIndex={deviceIndex}
+                    deviceFeatureIndex={deviceFeatureIndex}
+                    updateValue={props.updateValue}
+                    updateValueWithDebounce={props.updateValueWithDebounce}
+                  />
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

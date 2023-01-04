@@ -45,7 +45,6 @@ const RoomHumidityBox = ({ children, ...props }) => (
           </div>
           <div class="text-muted">{props.roomName}</div>
         </div>
-        <div class="col-auto"></div>
       </div>
     </div>
   </div>

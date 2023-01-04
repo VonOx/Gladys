@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+.card {
+  margin-bottom:1rem;
+}
+
 #app {
   height: 100%;
 }

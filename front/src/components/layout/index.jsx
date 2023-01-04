@@ -12,10 +12,6 @@ const notMainPages = currentUrl => {
   return false;
 };
 
-const Layout = ({ children, ...props }) => (
-  <div class="page">
-    <div class={notMainPages(props.currentUrl) ? 'page-single' : 'page-main'}>{children}</div>
-  </div>
-);
+const Layout = ({ children, ...props }) => <div class="page">{children}</div>;
 
 export default Layout;
