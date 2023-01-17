@@ -1,5 +1,6 @@
 import { Text } from 'preact-i18n';
 import cx from 'classnames';
+import dayjs from 'dayjs';
 
 import { DEVICE_FEATURE_CATEGORIES } from '../../../../../../../server/utils/constants';
 import RawDeviceValue from './RawDeviceValue';
@@ -36,7 +37,7 @@ const BadgeNumberDeviceValue = props => {
     <span class={cx('badge', colorClass)}>
       {!valued && <Text id="dashboard.boxes.devicesInRoom.noValue" />}
       {valued && (
-        <span>
+        <span title={dayjs(deviceFeature.last_value_changed).locale(props.user.language)}>
           {`${lastValue} `}
           <Text id={`deviceFeatureUnitShort.${unit}`} />
         </span>
